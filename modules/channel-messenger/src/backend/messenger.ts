@@ -81,6 +81,8 @@ export class ScopedMessengerService {
   async handleMessage(senderId: string, message) {
     this.config = await this.getConfig()
 
+    await this.sendAction(senderId, 'mark_seen')
+
     if (message.text) {
       const content = await this.bp.converse.sendMessage(this.botId, senderId, message, 'messenger')
 
@@ -89,9 +91,9 @@ export class ScopedMessengerService {
         const isTyping = content.responses[i].value
         const message = content.responses[i + 1]
 
-        isTyping && (await this._sendAction(senderId, 'typing_on'))
-        await this._sendMessage(senderId, message)
-        isTyping && (await this._sendAction(senderId, 'typing_off'))
+        isTyping && (await this.sendAction(senderId, 'typing_on'))
+        await this.sendTextMessage(senderId, message)
+        isTyping && (await this.sendAction(senderId, 'typing_off'))
       }
     }
   }
@@ -116,7 +118,7 @@ export class ScopedMessengerService {
       }
     }
 
-    await this._sendProfile(body)
+    await this.sendProfile(body)
   }
 
   async setupGreeting(): Promise<void> {
@@ -134,32 +136,36 @@ export class ScopedMessengerService {
       ]
     }
 
-    await this._sendProfile(payload)
+    await this.sendProfile(payload)
   }
 
-  private async _sendAction(psid, action) {
+  async sendAction(senderId, action) {
     const body = {
       recipient: {
-        id: psid
+        id: senderId
       },
       sender_action: action
     }
 
-    await this.http.post(`/messages`, body, { params: { access_token: this.config.verifyToken } })
+    await this._callEndpoint('/messages', body)
   }
 
-  private async _sendMessage(psid, message) {
+  async sendTextMessage(senderId, message) {
     const body = {
       recipient: {
-        id: psid
+        id: senderId
       },
       message
     }
 
-    await this.http.post(`/messages`, body, { params: { access_token: this.config.verifyToken } })
+    await this._callEndpoint('/messages', body)
   }
 
-  private async _sendProfile(message) {
-    await this.http.post(`messenger_profile?access_token=${this.config.verifyToken}`, message)
+  async sendProfile(message) {
+    await this._callEndpoint('/messenger_profile', message)
+  }
+
+  private async _callEndpoint(endpoint: string, body) {
+    await this.http.post(endpoint, body, { params: { access_token: this.config.verifyToken } })
   }
 }
