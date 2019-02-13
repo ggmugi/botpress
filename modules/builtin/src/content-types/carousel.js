@@ -45,12 +45,16 @@ function renderMessenger(data) {
       image_url: card.image ? url.resolve(data.BOT_URL, card.image) : null,
       subtitle: card.subtitle,
       buttons: (card.actions || []).map(a => {
-        if (a.action === 'Open URL') {
+        if (a.action === 'Say something') {
+          throw new Error('Channel-Messenger carousel does not support "Say something" action-buttons at the moment')
+        } else if (a.action === 'Open URL') {
           return {
             type: 'web_url',
             url: a.url,
             title: a.title
           }
+        } else {
+          throw new Error(`Channel-Messenger carousel does not support "${a.action}" action-buttons at the moment`)
         }
       })
     }))
