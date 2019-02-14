@@ -1,4 +1,5 @@
 import { IO } from 'botpress/sdk'
+import * as sdk from 'botpress/sdk'
 import { UserRepository } from 'core/repositories'
 import { TYPES } from 'core/types'
 import { InvalidParameterError } from 'errors'
@@ -55,12 +56,17 @@ export class ConverseService {
     })
   }
 
-  public async sendMessage(botId: string, userId: string, payload, channel = 'api'): Promise<any> {
+  public async sendMessage(
+    botId: string,
+    userId: string,
+    payload: sdk.converse.ConversePayload,
+    channel = 'api'
+  ): Promise<any> {
     if (!payload.text || !_.isString(payload.text) || payload.text.length > 360) {
       throw new InvalidParameterError('Text must be a valid string of less than 360 chars')
     }
 
-    await this.userRepository.getOrCreate('api', userId)
+    await this.userRepository.getOrCreate(channel, userId)
 
     const incomingEvent = Event({
       type: 'text',
@@ -125,8 +131,8 @@ export class ConverseService {
   }
 
   private _handleCapturePayload(event: IO.Event) {
-    // FIXME: Eventually channel-web will use converse api as well so we'll remove this check
-    if (event.channel !== 'api' && event.channel !== 'messenger') {
+    // Fow now web channel doesnt use converse service
+    if (event.channel === 'web') {
       return
     }
 
@@ -138,8 +144,8 @@ export class ConverseService {
   }
 
   private _handleCaptureContext(event: IO.IncomingEvent) {
-    // FIXME: Eventually channel-web will use converse api as well so we'll remove this check
-    if (event.channel !== 'api' && event.channel !== 'messenger') {
+    // Fow now web channel doesnt use converse service
+    if (event.channel === 'web') {
       return
     }
 

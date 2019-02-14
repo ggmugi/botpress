@@ -922,14 +922,24 @@ declare module 'botpress/sdk' {
 
   export namespace converse {
     /**
+     * The payload to be processed by the converse service
+     */
+    export interface ConversePayload {
+      /**
+       * The text message
+       */
+      text: string
+    }
+
+    /**
      * Send a message and return the response.
      * @param botId The bot Id
      * @param userId The user Id
-     * @param payload The channel-specific raw payload
+     * @param payload The payload to process
      * @param channel Optionnal channel name. If none is provided it defaults to 'api'
      * @returns The raw content element
      */
-    export function sendMessage(botId: string, userId: string, payload, channel?: string): Promise<any>
+    export function sendMessage(botId: string, userId: string, payload: ConversePayload, channel?: string): Promise<any>
   }
 
   /**
