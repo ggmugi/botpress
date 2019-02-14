@@ -31,15 +31,25 @@ const onServerReady = async (bp: typeof sdk) => {
       if (context.activity.type === ActivityTypes.Message) {
         const message = context.activity.text
         const accountId = context.activity.from.id
-
-        console.log('message', message)
-        console.log('accountId', accountId)
-
         const content = await bp.converse.sendMessage(botId, accountId, { text: message }, 'microsoft')
+
         for (let i = 0; i < content.responses.length; i += 2) {
-          const typing = content.responses[i]
+          const isTyping = content.responses[i].value
           const message = content.responses[i + 1]
-          await context.sendActivity(message.text)
+
+          // Format of message with typing indicator
+          // [
+          //   { type: 'typing' },
+          //   { type: 'delay', value: 2000 },
+          //   { type: 'message', text: 'Hello... How are you?' }
+          // ]
+
+          let activities = [message]
+          if (isTyping) {
+            activities = [{ type: 'typing' }, { type: 'delay', value: 250 }, message]
+          }
+
+          await context.sendActivities(activities)
         }
       }
     })
@@ -50,12 +60,9 @@ const onServerReady = async (bp: typeof sdk) => {
   })
 }
 
-const onBotMount = async (bp: typeof sdk, botId: string) => {}
-
 const entryPoint: sdk.ModuleEntryPoint = {
   onServerStarted,
   onServerReady,
-  onBotMount,
   definition: {
     name: channelMicrosoft,
     fullName: 'Microsoft Channel',
