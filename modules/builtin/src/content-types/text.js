@@ -39,6 +39,7 @@ function renderMicrosoft(data) {
       value: data.typing
     },
     {
+      type: 'message',
       text: data.text
     }
   ]
