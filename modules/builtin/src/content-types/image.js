@@ -45,11 +45,27 @@ function renderMessenger(data) {
   ]
 }
 
+function renderMicrosoft(data) {
+  return [
+    {
+      type: 'typing'
+    },
+    {
+      image: {
+        title: data.title,
+        url: url.resolve(data.BOT_URL, data.image)
+      }
+    }
+  ]
+}
+
 function renderElement(data, channel) {
   if (channel === 'web' || channel === 'api') {
     return render(data)
   } else if (channel === 'messenger') {
     return renderMessenger(data)
+  } else if (channel === 'microsoft') {
+    return renderMicrosoft(data)
   }
 
   return [] // TODO Handle channel not supported
