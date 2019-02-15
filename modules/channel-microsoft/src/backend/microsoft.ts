@@ -1,4 +1,4 @@
-import { ActivityTypes, BotFrameworkAdapter, TurnContext } from 'botbuilder'
+import { ActivityTypes, BotFrameworkAdapter, MessageFactory, TurnContext } from 'botbuilder'
 import * as sdk from 'botpress/sdk'
 
 import { Config } from '../config'
@@ -16,7 +16,7 @@ export class MicrosoftService {
     channelRouter.post('/api/messages', async (req, res) => {
       const botId = req.params.botId
       const microsoftService = await this.forBot(botId)
-      await microsoftService.processActivity(req, res)
+      await microsoftService.processRequest(req, res)
     })
 
     channelRouter.get('/', (req, res) => {
@@ -40,11 +40,9 @@ export class ScopedMicrosoftService {
   private adapter: BotFrameworkAdapter
 
   constructor(private bp: typeof sdk, private botId: string, private config: Config) {
-    console.log('config', config)
-
     this.adapter = new BotFrameworkAdapter({
-      appId: config.microsoftAppId,
-      appPassword: config.microsoftAppPassword
+      appId: this.config.microsoftAppId,
+      appPassword: this.config.microsoftAppPassword
     })
 
     this.adapter.onTurnError = async (context, error) => {
@@ -56,7 +54,7 @@ export class ScopedMicrosoftService {
     }
   }
 
-  async processActivity(req, res) {
+  async processRequest(req, res): Promise<void> {
     await this.adapter.processActivity(req, res, async (context: TurnContext) => {
       if (context.activity.type === ActivityTypes.Message) {
         const message = context.activity.text
@@ -75,7 +73,14 @@ export class ScopedMicrosoftService {
           let activities = [message]
 
           if (isTyping) {
-            activities = [{ type: 'typing' }, { type: 'delay', value: 250 }, message]
+            activities = [{ type: 'typing' }, { type: 'delay', value: 250 }]
+          }
+
+          if (message.actions) {
+            const activity = MessageFactory.suggestedActions(message.actions, message.text)
+            activities = [...activities, activity]
+          } else if (message.text) {
+            activities = [...activities, message]
           }
 
           await context.sendActivities(activities)

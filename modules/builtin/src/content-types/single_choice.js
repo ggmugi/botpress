@@ -41,11 +41,30 @@ function renderMessenger(data) {
   ]
 }
 
+function renderMicrosoft(data) {
+  return [
+    {
+      type: 'typing',
+      value: data.typing
+    },
+    {
+      text: data.text,
+      actions: data.choices.map(c => ({
+        type: 'imBack',
+        title: c.title,
+        value: c.value.toUpperCase()
+      }))
+    }
+  ]
+}
+
 function renderElement(data, channel) {
   if (channel === 'web' || channel === 'api') {
     return render(data)
   } else if (channel === 'messenger') {
     return renderMessenger(data)
+  } else if (channel === 'microsoft') {
+    return renderMicrosoft(data)
   }
 
   return [] // TODO Handle channel not supported

@@ -27,6 +27,7 @@ function renderMessenger(data) {
       value: data.typing
     },
     {
+      type: 'messenger',
       text: data.text
     }
   ]
