@@ -38,6 +38,32 @@ function render(data) {
   ]
 }
 
+function renderMicrosoft(data) {
+  return [
+    { type: 'typing' },
+    {
+      attachments: data.items.map(card => ({
+        title: card.title,
+        subtitle: card.subtitle,
+        images: [url.resolve(data.BOT_URL, card.image)],
+        buttons: (card.actions || []).map(a => {
+          if (a.action === 'Say something') {
+            throw new Error('Channel-Microsoft carousel does not support "Say something" action-buttons at the moment')
+          } else if (a.action === 'Open URL') {
+            return {
+              type: 'openUrl',
+              title: a.title,
+              value: a.url
+            }
+          } else {
+            throw new Error(`Channel-Micorsoft carousel does not support "${a.action}" action-buttons at the moment`)
+          }
+        })
+      }))
+    }
+  ]
+}
+
 function renderMessenger(data) {
   const renderElements = data => {
     return data.items.map(card => ({
@@ -82,6 +108,8 @@ function renderElement(data, channel) {
     return render(data)
   } else if (channel === 'messenger') {
     return renderMessenger(data)
+  } else if (channel === 'microsoft') {
+    return renderMicrosoft(data)
   }
 
   return [] // TODO Handle channel not supported

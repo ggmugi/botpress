@@ -1,4 +1,4 @@
-import { ActivityTypes, BotFrameworkAdapter, MessageFactory, TurnContext } from 'botbuilder'
+import { ActivityTypes, BotFrameworkAdapter, CardFactory, MessageFactory, TurnContext } from 'botbuilder'
 import * as sdk from 'botpress/sdk'
 
 import { Config } from '../config'
@@ -78,9 +78,18 @@ export class ScopedMicrosoftService {
 
           if (message.actions) {
             const activity = MessageFactory.suggestedActions(message.actions, message.text)
-            activities = [...activities, activity]
+            activities.push(activity)
+          } else if (message.attachments) {
+            // See hero card data reference:
+            // https://docs.microsoft.com/en-us/microsoftteams/platform/concepts/cards/cards-reference#hero-card
+            const attachments = message.attachments.map(a => {
+              return CardFactory.heroCard(a.title, a.subtitle, a.images, a.buttons)
+            })
+
+            const carousel = MessageFactory.carousel(attachments)
+            activities.push(carousel)
           } else if (message.text) {
-            activities = [...activities, message]
+            activities.push(message)
           }
 
           await context.sendActivities(activities)
