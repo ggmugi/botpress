@@ -48,7 +48,8 @@ function renderMessenger(data) {
 function renderMicrosoft(data) {
   return [
     {
-      type: 'typing'
+      type: 'typing',
+      value: data.typing
     },
     {
       image: {

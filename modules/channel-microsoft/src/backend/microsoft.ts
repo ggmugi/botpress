@@ -51,7 +51,7 @@ export class ScopedMicrosoftService {
         .forBot(botId)
         .attachError(error)
         .error(error.message)
-      await context.sendActivity(`Oops. Something went wrong!`)
+      await context.sendActivity(`Oops. Something went wrong! Please try something else.`)
     }
   }
 
@@ -79,6 +79,8 @@ export class ScopedMicrosoftService {
             activities.push(this._handleImage(message))
           } else if (message.text) {
             activities.push(message)
+          } else {
+            throw new Error('channel-microsoft does not recognize any content type')
           }
 
           await context.sendActivities(activities)

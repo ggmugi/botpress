@@ -40,7 +40,10 @@ function render(data) {
 
 function renderMicrosoft(data) {
   return [
-    { type: 'typing' },
+    {
+      type: 'typing',
+      value: data.typing
+    },
     {
       attachments: data.items.map(card => ({
         title: card.title,
