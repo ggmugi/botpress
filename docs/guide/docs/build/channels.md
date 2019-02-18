@@ -81,15 +81,21 @@ Please note that for now this API can't:
 
 ## Messenger
 
-### Setup
+### Requirements
 
-Channel-messenger requires a Facebook App with Messenger enabled.
+Messenger requires you to have a Facebook App and a Facebook Page to setup your bot.
 
 #### Create your Facebook App
 
 Go to your [Facebook Apps](https://developers.facebook.com/apps/) and create a new App.
 
 ![Create App](assets/messenger-app.png)
+
+#### Enable Messenger on your App
+
+Go to Products > Messenger > Setup
+
+![Setup Messenger](assets/messenger-setup.png)
 
 #### Create a Facebook Page
 
@@ -99,15 +105,11 @@ Go to your [Facebook Apps](https://developers.facebook.com/apps/) and create a n
 
 ![Create Facebook Page](assets/messenger-page.png)
 
-#### Enable Messenger on your App
-
-Go to Products > Messenger > Setup
-
-![Setup Messenger](assets/messenger-setup.png)
-
 #### Setup your webhook
 
 Messenger will use a webhook that you'll need register in order to communicate with your bot.
+
+1. In Products > Messenger > Settings > Webhooks > Setup Webhooks
 
 1. In Callback URL, enter your secured public url and make sure to point to the `/webhook` endpoint.
 1. Paste your Page Access Token in the Verify Token field.
@@ -130,7 +132,7 @@ Head over to `data/bots/<your_bot>/config/channel-messenger.json` and edit your 
 }
 ```
 
-### Config
+### Configuration
 
 The config file for channel-messenger can be found at `data/bots/<your_bot>/config/channel-messenger.json`.
 
