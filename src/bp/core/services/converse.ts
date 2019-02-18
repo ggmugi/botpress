@@ -125,8 +125,8 @@ export class ConverseService {
   }
 
   private _handleCapturePayload(event: IO.Event) {
-    // FIXME: Eventually channel-web will use converse api as well so we'll remove this check
-    if (event.channel !== 'api' && event.channel !== 'messenger') {
+    // TODO: We skip this because channel-web does not use converse api yet.
+    if (event.channel === 'web') {
       return
     }
 
@@ -138,8 +138,8 @@ export class ConverseService {
   }
 
   private _handleCaptureContext(event: IO.IncomingEvent) {
-    // FIXME: Eventually channel-web will use converse api as well so we'll remove this check
-    if (event.channel !== 'api' && event.channel !== 'messenger') {
+    // TODO: We skip this because channel-web does not use converse api yet.
+    if (event.channel === 'web') {
       return
     }
 

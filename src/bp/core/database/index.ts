@@ -34,7 +34,7 @@ export default class Database {
       this.tables.push(table)
     })
 
-    // await this.runMigrations()
+    await this.runMigrations()
   }
 
   async seedForTests() {
