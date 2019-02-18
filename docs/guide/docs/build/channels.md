@@ -89,7 +89,7 @@ Channel-messenger requires a Facebook App with Messenger enabled.
 
 Go to your [Facebook Apps](https://developers.facebook.com/apps/) and create a new App.
 
-![Create App](assets/create-facebook-app.png)
+![Create App](assets/messenger-app.png)
 
 #### Create a Facebook Page
 
@@ -97,13 +97,13 @@ Go to your [Facebook Apps](https://developers.facebook.com/apps/) and create a n
 1. Then select the newly created page in the `Page` dropdown menu.
 1. Copy your Page Access Token, you'll need it to setup your webhook.
 
-![Create Facebook Page](assets/create-page.png)
+![Create Facebook Page](assets/messenger-page.png)
 
 #### Enable Messenger on your App
 
 Go to Products > Messenger > Setup
 
-![Setup Messenger](assets/setup-messenger-product.png)
+![Setup Messenger](assets/messenger-setup.png)
 
 #### Setup your webhook
 
@@ -113,9 +113,9 @@ Messenger will use a webhook that you'll need register in order to communicate w
 1. Paste your Page Access Token in the Verify Token field.
 1. Make sure `messages` and `messaging_postbacks` are checked in Subscription Fields.
 
-> **Note**: When you setup your webhook, Messenger requires a **secured public** address. To test on localhost, we recommend using services like [pagekite](https://pagekite.net/), [ngrok](https://ngrok.com) or [tunnelme](https://localtunnel.github.io/www/) to expose your server.
+> **⭐ Note**: When you setup your webhook, Messenger requires a **secured public** address. To test on localhost, we recommend using services like [pagekite](https://pagekite.net/), [ngrok](https://ngrok.com) or [tunnelme](https://localtunnel.github.io/www/) to expose your server.
 
-![Setup Webhook](assets/setup-webhook.png)
+![Setup Webhook](assets/messenger-webhook.png)
 
 #### Add your token to your module config file
 
@@ -142,7 +142,7 @@ The config file for channel-messenger can be found at `data/bots/<your_bot>/conf
 
 ### More details
 
-If you need more details on how to setup a bot on Messenger, please refer to the offical [guide](https://developers.facebook.com/docs/messenger-platform/getting-started/app-setup) to setup your Facebook App and register your webhook.
+If you need more details on how to setup a bot on Messenger, please refer to Facebook [doc](https://developers.facebook.com/docs/messenger-platform/getting-started/app-setup) to setup your Facebook App and register your webhook.
 
 # Other Channels
 
