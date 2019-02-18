@@ -1,14 +1,14 @@
 export interface Config {
   /**
-   * The Facebook Page Token
+   * The Facebook Page Access Token
    */
   verifyToken: string
   /**
-   * The bot greeting message
+   * The greeting message people will see on the welcome screen
    */
   greeting?: string
   /**
-   * The bot get started payload
+   * The message of the welcome screen "Get Started" button
    */
   getStarted?: string
 }
