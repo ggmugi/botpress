@@ -1,5 +1,7 @@
 import axios, { AxiosInstance } from 'axios'
+import bodyParser from 'body-parser'
 import * as sdk from 'botpress/sdk'
+import crypto from 'crypto'
 import { Router } from 'express'
 
 import { Config } from '../config'
@@ -14,6 +16,12 @@ export class MessengerService {
 
   initialize() {
     this.router = this.bp.http.createRouterForBot('channel-messenger', { checkAuthentication: false })
+    this.router.use(
+      bodyParser.json({
+        verify: this._verifySignature.bind(this)
+      })
+    )
+
     this.router.get('/webhook', this._setupWebhook.bind(this))
     this.router.post('/webhook', this._handleMessage.bind(this))
   }
@@ -25,6 +33,32 @@ export class MessengerService {
 
     this.botsMessengers[botId] = new ScopedMessengerService(botId, this.bp, this.http)
     return this.botsMessengers[botId]
+  }
+
+  // See: https://developers.facebook.com/docs/messenger-platform/webhook#security
+  private async _verifySignature(req, res, buffer) {
+    const messenger = await this.forBot(req.params.botId)
+    const config = await messenger.getConfig()
+    const signatureError = new Error("Couldn't validate the request signature.")
+
+    if (!/^\/webhook/i.test(req.path)) {
+      return
+    }
+
+    const signature = req.headers['x-hub-signature']
+    if (!signature) {
+      throw signatureError
+    } else {
+      const [, hash] = signature.split('=')
+      const expectedHash = crypto
+        .createHmac('sha1', config.verifyToken)
+        .update(buffer)
+        .digest('hex')
+
+      if (hash != expectedHash) {
+        throw signatureError
+      }
+    }
   }
 
   async _handleMessage(req, res) {

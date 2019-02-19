@@ -131,7 +131,7 @@ export class ConverseService {
   }
 
   private _handleCapturePayload(event: IO.Event) {
-    // Fow now web channel doesnt use converse service
+    // TODO: We skip this because channel-web does not use converse api yet.
     if (event.channel === 'web') {
       return
     }
@@ -144,7 +144,7 @@ export class ConverseService {
   }
 
   private _handleCaptureContext(event: IO.IncomingEvent) {
-    // Fow now web channel doesnt use converse service
+    // TODO: We skip this because channel-web does not use converse api yet.
     if (event.channel === 'web') {
       return
     }
