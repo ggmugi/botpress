@@ -146,6 +146,50 @@ The config file for channel-messenger can be found at `data/bots/<your_bot>/conf
 
 If you need more details on how to setup a bot on Messenger, please refer to Facebook [doc](https://developers.facebook.com/docs/messenger-platform/getting-started/app-setup) to setup your Facebook App and register your webhook.
 
-# Other Channels
+## Microsoft
+
+Use the Microsoft Channel to integrate your bot to Skype, Skype for Business, Microsoft Teams and many others.
+
+### Requirements
+
+#### Local Development
+
+You can use Bot Framework Emulator to test your bot locally without having to use Azure Bot Service.
+
+![Bot Framework Emulator](assets/microsoft-config.png)
+
+1. Install [Bot Framework Emulator](https://github.com/Microsoft/BotFramework-Emulator)
+1. Create a new bot configuration
+1. Endpoint URL should looks like this: `http://localhost:3000/api/v1/bots/<your_bot>/mod/channel-microsoft/api/messages`
+1. App ID and App password should be the same as your [configuration](channels#configuration-1) file.
+
+#### Azure Bot Service
+
+1. Please follow the [official guide](https://docs.microsoft.com/en-us/azure/bot-service/bot-service-quickstart?view=azure-bot-service-4.0) to setup a bot on Azure.
+1. Copy your App ID and App password and paste them in your [configuration](channels#configuration-1) file.
+1. Go to Bot Services > Your-Bot > Settings and edit your Messaging Endpoint. The URL should be secured, public and end with the `api/messages` endpoint: `https://<your_domain>/api/v1/bots/<your_bot>/mod/channel-microsoft/api/messages`
+1. Go to Bot Services > Your-Bot > Test in Web Chat to test your bot
+
+### Configuration
+
+The channel-microsoft config can be found at `data/bots/<your_bot>/config/channel-microsoft.json`:
+
+```json
+{
+  "$schema": "../../../assets/modules/channel-microsoft/config.schema.json",
+  "microsoftAppId": "<your_app_id>",
+  "microsoftAppPassword": "<your_app_password>"
+}
+```
+
+### More details
+
+For more details on how to setup your bot on Microsoft, please refer to the [official guide](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-tutorial-basic-deploy?view=azure-bot-service-4.0&tabs=javascript).
+
+## Testing on localhost
+
+To test different messaging channels on a localhost Botpress server, you can expose it using products like [pagekite](https://pagekite.net/), [ngrok](https://ngrok.com) or [tunnelme](https://localtunnel.github.io/www/).
+
+## Other Channels
 
 We are in the progress of adding many more channels to Botpress Server. If you would like to help us with that, [pull requests](https://github.com/botpress/botpress#contributing) are welcomed!
